@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://v18173sgi8cb"]
+
+[ext_resource type="Script" uid="uid://bvmafgagt0uly" path="res://scripts/ui/ToastItem.gd" id="1_324tu"]
+
+[node name="ToastItem" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_324tu")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

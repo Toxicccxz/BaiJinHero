@@ -1,0 +1,121 @@
+[gd_scene load_steps=9 format=3 uid="uid://bn38b5uuddgsp"]
+
+[ext_resource type="Script" uid="uid://b6nlnij3h62ww" path="res://scripts/app/Main.gd" id="1_kq71y"]
+[ext_resource type="Script" uid="uid://b0ncpquhd1f74" path="res://scripts/ui/FadeLayer.gd" id="2_6sj1m"]
+[ext_resource type="Script" uid="uid://bbmkhy36au0jf" path="res://scripts/ui/AdaptiveRoot.gd" id="2_bejoh"]
+[ext_resource type="Script" uid="uid://bxc2hsclbep6q" path="res://scripts/ui/LoadingOverlay.gd" id="3_ghmxm"]
+[ext_resource type="Script" uid="uid://6ol3m5y8jbq3" path="res://scripts/ui/ToastLayer.gd" id="4_gba72"]
+[ext_resource type="Script" uid="uid://vjx1s7ak1asm" path="res://scripts/ui/SystemMenu.gd" id="5_7vfds"]
+[ext_resource type="Script" uid="uid://djc4ftpdgb8h3" path="res://scripts/ui/InputHint.gd" id="6_dfwj7"]
+[ext_resource type="Script" uid="uid://dwqkauwhj42jg" path="res://scripts/audio/AudioHub.gd" id="8_toctt"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_kq71y")
+
+[node name="UIRoot" type="CanvasLayer" parent="."]
+
+[node name="AdaptiveRoot" type="Control" parent="UIRoot"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_bejoh")
+
+[node name="FadeLayer" type="ColorRect" parent="UIRoot/AdaptiveRoot"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_6sj1m")
+
+[node name="LoadingOverlay" type="Control" parent="UIRoot/AdaptiveRoot"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_ghmxm")
+
+[node name="Dimmer" type="ColorRect" parent="UIRoot/AdaptiveRoot/LoadingOverlay"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Spinner" type="TextureRect" parent="UIRoot/AdaptiveRoot/LoadingOverlay"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ProgressBar" type="ProgressBar" parent="UIRoot/AdaptiveRoot/LoadingOverlay"]
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 27.0
+
+[node name="ToastLayer" type="Control" parent="UIRoot/AdaptiveRoot"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_gba72")
+
+[node name="ToastStack" type="VBoxContainer" parent="UIRoot/AdaptiveRoot/ToastLayer"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SystemMenu" type="Control" parent="UIRoot/AdaptiveRoot"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("5_7vfds")
+
+[node name="Panel" type="Panel" parent="UIRoot/AdaptiveRoot/SystemMenu"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Title" type="Label" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Buttons" type="VBoxContainer" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BtnResume" type="Button" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel/Buttons"]
+layout_mode = 2
+
+[node name="BtnSettings" type="Button" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel/Buttons"]
+layout_mode = 2
+
+[node name="BtnTitle" type="Button" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel/Buttons"]
+layout_mode = 2
+
+[node name="BtnQuit" type="Button" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel/Buttons"]
+layout_mode = 2
+
+[node name="InputHint" type="Control" parent="UIRoot/AdaptiveRoot"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("6_dfwj7")
+
+[node name="KBM" type="TextureRect" parent="UIRoot/AdaptiveRoot/InputHint"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Gamepad" type="TextureRect" parent="UIRoot/AdaptiveRoot/InputHint"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Touch" type="TextureRect" parent="UIRoot/AdaptiveRoot/InputHint"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DebugConsole" type="RichTextLabel" parent="UIRoot"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="AudioHub" type="Node" parent="."]
+script = ExtResource("8_toctt")
