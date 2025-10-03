@@ -20,7 +20,7 @@ offset_bottom = 40.0
 [node name="Logo" type="TextureRect" parent="VBox"]
 layout_mode = 2
 
-[node name="Logo2" type="Label" parent="VBox"]
+[node name="Tip" type="Label" parent="VBox"]
 layout_mode = 2
 
 [node name="Bar" type="ProgressBar" parent="VBox"]

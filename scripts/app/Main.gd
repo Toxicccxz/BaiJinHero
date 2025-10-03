@@ -1,5 +1,18 @@
 extends Node
 
+# —— 首次运行持久化标记（保存在用户数据目录）——
+const FIRST_RUN_FLAG_PATH := "user://first_run.done"
+
+func _is_first_run() -> bool:
+	# 如果文件不存在 => 第一次运行
+	return not FileAccess.file_exists(FIRST_RUN_FLAG_PATH)
+
+func _mark_first_run_done() -> void:
+	var f := FileAccess.open(FIRST_RUN_FLAG_PATH, FileAccess.WRITE)
+	if f:
+		f.store_string("ok")
+		f.close()
+
 @onready var ui_root       : CanvasLayer = $UIRoot
 @onready var adaptive_root : Control     = $UIRoot/AdaptiveRoot
 @onready var fade_layer    : ColorRect   = $UIRoot/AdaptiveRoot/FadeLayer
@@ -30,8 +43,17 @@ func _ready() -> void:
 	if Engine.has_singleton("InputHub"):
 		InputHub.connect("device_changed", Callable(input_hint, "set_device"))
 
-	# 进入标题场景
-	await SceneRouter.goto_title()
+	# —— 启动路由：首次进 Boot，之后直接进 Title ——
+	# Debug：按住 Shift 强制走 Boot（可选）
+	var force_boot := Input.is_key_pressed(KEY_SHIFT)
+	if _is_first_run() or force_boot:
+		# 进入 Boot（Boot 完成后会自己切到 Title）
+		await SceneRouter.goto_scene("res://app/Boot.tscn")
+		# 立刻写入“已完成首次运行”标记（避免下次仍走 Boot）
+		_mark_first_run_done()
+	else:
+		# 非首次：直接进标题
+		await SceneRouter.goto_title()
 
 func _unhandled_input(e: InputEvent) -> void:
 	if e.is_action_pressed("ui_cancel"):
@@ -44,11 +66,15 @@ func _toggle_system_menu() -> void:
 
 # —— 菜单回调 ——
 func _on_menu_resume() -> void: _toggle_system_menu()
-func _on_menu_settings() -> void: SceneRouter.toast("Settings TBD")
+
+func _on_menu_settings() -> void:
+	SceneRouter.toast("Settings TBD")
+
 func _on_menu_goto_title() -> void:
 	get_tree().paused = false
 	system_menu.visible = false
 	await SceneRouter.goto_title()
+
 func _on_menu_quit() -> void:
 	get_tree().paused = false
 	get_tree().quit()

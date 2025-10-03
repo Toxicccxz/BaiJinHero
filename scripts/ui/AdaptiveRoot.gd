@@ -12,7 +12,10 @@ func _notification(what: int) -> void:
 
 func _layout() -> void:
 	var sz := get_viewport_rect().size
-	var aspect := sz.x / max(1.0, sz.y)
+	var w: float = float(sz.x)
+	var h: float = float(sz.y)
+	var aspect: float = w / max(1.0, h)   # 两个参数同为 float，返回就是 float
+
 	if right_gutter:
 		right_gutter.visible = aspect >= 1.6  # ≥16:10 展开侧栏；窄屏折叠
 

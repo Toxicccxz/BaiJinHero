@@ -30,7 +30,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## 1) 准备预热清单（按需替换为你的资源路径）
 func _prepare_preload_list() -> void:
-	# 建议：把“会在标题和首屏场景中必用”的资源放进来（UI主题、字体、通用音效、通用材质）
 	_requests = [
 		"res://ui/theme/default_theme.tres",
 		"res://art/fonts/NotoSans.tres",
@@ -48,7 +47,6 @@ func _kickoff() -> void:
 
 	# 2.1 迁移/初始化（可在这里做异步IO，如读取设置、迁移存档）
 	if Engine.has_singleton("SaveSys"):
-		# 这里假设 SaveSys 提供 migrate_all()，你可换成自定义逻辑
 		await SaveSys.migrate_all()
 
 	# 2.2 线程预热 ResourceLoader（非阻塞）
@@ -60,7 +58,7 @@ func _kickoff() -> void:
 	await _poll_until_done()
 
 	# 2.4 等待最短展示时间，避免一闪而过
-	var elapsed := Time.get_ticks_msec() / 1000.0 - _start_time
+	var elapsed: float = float(Time.get_ticks_msec()) / 1000.0 - _start_time
 	if elapsed < min_show_seconds:
 		await get_tree().create_timer(min_show_seconds - elapsed).timeout
 
@@ -72,25 +70,24 @@ func _kickoff() -> void:
 
 ## 3) 进度轮询（更新 ProgressBar）
 func _poll_until_done() -> void:
-	var total := max(1, _requests.size())
+	var total: int = int(max(1, _requests.size()))
 	while true:
-		if _skipped: 
+		if _skipped:
 			_bar.value = 100.0
 			return
 
-		var done := 0
+		var done: int = 0
 		for path in _requests:
-			var st := ResourceLoader.load_threaded_get_status(path)
+			var st: int = ResourceLoader.load_threaded_get_status(path)
 			if st == ResourceLoader.THREAD_LOAD_LOADED:
 				done += 1
 			elif st == ResourceLoader.THREAD_LOAD_FAILED:
-				# 失败也计入（避免卡死），你也可以在这里记录日志
 				done += 1
 
-		var progress := float(done) / float(total)
+		var progress: float = float(done) / float(total)
 		_bar.value = progress * 100.0
 
 		if done >= total:
 			return
 
-		await get_tree().process_frame  # 下一帧再查（也可用 0.02s 的Timer）
+		await get_tree().process_frame
