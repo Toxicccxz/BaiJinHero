@@ -36,7 +36,7 @@ func _on_start() -> void:
 
 func _on_continue() -> void:
 	if Engine.has_singleton("SaveSys") and SaveSys.has_method("load_latest"):
-		var payload := await SaveSys.load_latest()
+		var payload: Dictionary = await SaveSys.load_latest()
 		if payload and payload.has("last_scene"):
 			await SceneRouter.goto_scene(payload["last_scene"])
 			return

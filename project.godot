@@ -20,6 +20,8 @@ SceneRouter="*res://scripts/core/autoload/SceneRouter.gd"
 Platform="*res://scripts/core/autoload/Platform.gd"
 InputHub="*res://scripts/core/autoload/InputHub.gd"
 SaveSys="*res://scripts/core/autoload/SaveSys.gd"
+AudioHub="*res://scripts/core/autoload/AudioHub.gd"
+GameState="*res://scripts/core/autoload/GameState.gd"
 
 [dotnet]
 

@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://6ol3m5y8jbq3" path="res://scripts/ui/ToastLayer.gd" id="4_gba72"]
 [ext_resource type="Script" uid="uid://vjx1s7ak1asm" path="res://scripts/ui/SystemMenu.gd" id="5_7vfds"]
 [ext_resource type="Script" uid="uid://djc4ftpdgb8h3" path="res://scripts/ui/InputHint.gd" id="6_dfwj7"]
-[ext_resource type="Script" uid="uid://dwqkauwhj42jg" path="res://scripts/audio/AudioHub.gd" id="8_toctt"]
+[ext_resource type="Script" uid="uid://dwqkauwhj42jg" path="res://scripts/core/autoload/AudioHub.gd" id="8_toctt"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_kq71y")
