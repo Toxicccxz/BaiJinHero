@@ -6,7 +6,6 @@ extends Control
 @onready var btn_quit      : Button = $Center/Menu/BtnQuit
 @onready var version_label : Label  = $Version
 
-# 下一步要进入的游戏场景（可换成你的探索首图）
 @export var first_map_scene: String = "res://features/exploration/scenes/World_01.tscn"
 
 func _ready() -> void:
@@ -17,30 +16,35 @@ func _ready() -> void:
 	btn_settings.pressed.connect(_on_settings)
 	btn_quit.pressed.connect(_on_quit)
 
-	# 播标题BGM（如果你有 AudioHub 单例）
-	if Engine.has_singleton("AudioHub"):
-		var bgm := load("res://sfx/bgm/title.ogg")
-		if bgm: AudioHub.play_bgm(bgm)
+	# —— Debug：看看 Autoload 是否在 /root 挂上了 ——
+	print("TitleScreen ready; has /root/AudioHub? ",
+		get_tree().get_root().has_node("AudioHub"))
 
-	# 是否有可继续的存档（按需替换为你的检测逻辑）
+	# 播标题BGM（Autoload 直接用全局名访问）
+	var bgm_path := "res://sfx/bgm/title.ogg"
+	if ResourceLoader.exists(bgm_path) and get_tree().get_root().has_node("AudioHub"):
+		var bgm := load(bgm_path)
+		if bgm:
+			AudioHub.play_bgm(bgm)
+			print("xavier: play bgm")
+
+	# 是否有可继续的存档
 	var has_save := false
-	if Engine.has_singleton("SaveSys"):
-		has_save = SaveSys.has_any_save() if SaveSys.has_method("has_any_save") else false
+	if get_tree().get_root().has_node("SaveSys") and SaveSys.has_method("has_any_save"):
+		has_save = SaveSys.has_any_save()
 	btn_continue.disabled = not has_save
 
 func _on_start() -> void:
-	# 可在这里初始化一次新游戏的 GameState
-	if Engine.has_singleton("GameState") and GameState.has_method("new_game"):
+	if get_tree().get_root().has_node("GameState") and GameState.has_method("new_game"):
 		GameState.new_game()
 	await SceneRouter.goto_scene(first_map_scene)
 
 func _on_continue() -> void:
-	if Engine.has_singleton("SaveSys") and SaveSys.has_method("load_latest"):
+	if get_tree().get_root().has_node("SaveSys") and SaveSys.has_method("load_latest"):
 		var payload: Dictionary = await SaveSys.load_latest()
 		if payload and payload.has("last_scene"):
 			await SceneRouter.goto_scene(payload["last_scene"])
 			return
-	# 没存档则走 Start
 	await _on_start()
 
 func _on_settings() -> void:

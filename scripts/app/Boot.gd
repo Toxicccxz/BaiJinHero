@@ -2,7 +2,7 @@ extends Control
 
 @export var next_scene: String = "res://app/TitleScreen.tscn"
 @export var show_skip_hint: bool = true
-@export var min_show_seconds: float = 0.8         # 最短展示时间（避免闪屏）
+@export var min_show_seconds: float = 0.8          # 最短展示时间（避免闪屏）
 @export var poll_timeout_seconds: float = 10.0     # 线程加载轮询超时（防死等）
 
 @onready var _bar   : ProgressBar = $VBox/Bar
@@ -14,6 +14,10 @@ var _start_time := 0.0
 var _requests: Array[String] = []
 var _started := false
 var _skipped := false
+
+# —— Autoload 工具 —— 
+func _has_autoload(name: String) -> bool:
+	return get_tree().get_root().has_node(name)
 
 func _ready() -> void:
 	_start_time = Time.get_ticks_msec() / 1000.0
@@ -50,7 +54,7 @@ func _kickoff() -> void:
 	if _bar: _bar.value = 0.0
 
 	# 2.1 存档迁移（可选，存在则执行）
-	if Engine.has_singleton("SaveSys") and SaveSys.has_method("migrate_all"):
+	if _has_autoload("SaveSys") and SaveSys.has_method("migrate_all"):
 		await SaveSys.migrate_all()
 
 	# 2.2 如果清单为空，直接收尾跳转
@@ -76,14 +80,12 @@ func _finish_and_goto() -> void:
 	# 路径校验，避免跳转到不存在的场景导致黑屏
 	if not ResourceLoader.exists(next_scene):
 		push_error("[Boot] next_scene 不存在：%s" % next_scene)
-		# 有全局吐司就提示一下
-		if Engine.has_singleton("SceneRouter"):
+		if _has_autoload("SceneRouter"):
 			SceneRouter.toast("next_scene not found")
-		# 为了不卡死，直接退出（或改成留在当前界面）
 		get_tree().quit()
 		return
 
-	if Engine.has_singleton("SceneRouter"):
+	if _has_autoload("SceneRouter"):
 		await SceneRouter.goto_scene(next_scene)
 	else:
 		get_tree().change_scene_to_file(next_scene)
@@ -116,7 +118,7 @@ func _poll_until_done() -> void:
 		if done >= total:
 			return
 
-		# 超时保护：进入失败兜底（可按需改策略）
+		# 超时保护
 		var now := Time.get_ticks_msec() / 1000.0
 		if poll_timeout_seconds > 0.0 and (now - begin) >= poll_timeout_seconds:
 			push_warning("[Boot] 预热超时，继续流程（可能某些资源未完成加载）")
