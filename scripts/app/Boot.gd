@@ -5,9 +5,10 @@ extends Control
 @export var min_show_seconds: float = 0.8          # 最短展示时间（避免闪屏）
 @export var poll_timeout_seconds: float = 10.0     # 线程加载轮询超时（防死等）
 
-@onready var _bar   : ProgressBar = $VBox/Bar
-@onready var _tip   : Label       = $VBox/Tip
-@onready var _logo  : TextureRect = $VBox/Logo
+@onready var _dimmer: ColorRect   = $Dimmer
+@onready var _bar   : ProgressBar = $CenterCard/VBox/Bar
+@onready var _tip   : Label       = $CenterCard/VBox/Tip
+@onready var _logo  : TextureRect = $CenterCard/VBox/Logo
 @onready var _build : Label       = $Footer/BuildLabel
 
 var _start_time := 0.0
@@ -20,11 +21,17 @@ func _has_autoload(name: String) -> bool:
 	return get_tree().get_root().has_node(name)
 
 func _ready() -> void:
+	print("[Boot] ready")
 	_start_time = Time.get_ticks_msec() / 1000.0
 	if _build:
 		_build.text = "Build: %s  |  %s" % [ProjectSettings.get_setting("application/config/version", "dev"), OS.get_name()]
 	if _tip:
 		_tip.visible = show_skip_hint
+		
+	if has_node("Dimmer"):
+		var tw2 := create_tween().set_loops()  # 无限循环
+		tw2.tween_property($Dimmer, "modulate:a", 0.38, 1.8)
+		tw2.tween_property($Dimmer, "modulate:a", 0.32, 1.8)
 
 	_prepare_preload_list()
 	await _kickoff()
@@ -112,7 +119,9 @@ func _poll_until_done() -> void:
 				done += 1
 
 		if _bar:
-			_bar.value = float(done) / float(total) * 100.0
+			var pct := int(float(done) / float(total) * 100.0)
+			_bar.value = pct * 100.0
+			_bar.set_text("资源加载中…  %d%%" % pct) # Godot 4 ProgressBar 支持 set_text
 
 		# 全部完成
 		if done >= total:

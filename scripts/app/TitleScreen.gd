@@ -9,6 +9,7 @@ extends Control
 @export var first_map_scene: String = "res://features/exploration/scenes/World_01.tscn"
 
 func _ready() -> void:
+	print("[Title] ready")
 	version_label.text = "v%s" % ProjectSettings.get_setting("application/config/version", "dev")
 
 	btn_start.pressed.connect(_on_start)

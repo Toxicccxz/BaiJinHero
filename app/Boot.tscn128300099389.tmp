@@ -29,6 +29,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qaxk2")
+next_scene = null
+show_skip_hint = null
+min_show_seconds = null
+poll_timeout_seconds = null
 
 [node name="BG" type="ColorRect" parent="."]
 layout_mode = 1

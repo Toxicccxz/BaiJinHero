@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bn38b5uuddgsp"]
+[gd_scene load_steps=8 format=3 uid="uid://bn38b5uuddgsp"]
 
 [ext_resource type="Script" uid="uid://b6nlnij3h62ww" path="res://scripts/app/Main.gd" id="1_kq71y"]
 [ext_resource type="Script" uid="uid://b0ncpquhd1f74" path="res://scripts/ui/FadeLayer.gd" id="2_6sj1m"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://6ol3m5y8jbq3" path="res://scripts/ui/ToastLayer.gd" id="4_gba72"]
 [ext_resource type="Script" uid="uid://vjx1s7ak1asm" path="res://scripts/ui/SystemMenu.gd" id="5_7vfds"]
 [ext_resource type="Script" uid="uid://djc4ftpdgb8h3" path="res://scripts/ui/InputHint.gd" id="6_dfwj7"]
-[ext_resource type="Script" uid="uid://dwqkauwhj42jg" path="res://scripts/core/autoload/AudioHub.gd" id="8_toctt"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_kq71y")
@@ -17,69 +16,119 @@ layer = 10
 
 [node name="AdaptiveRoot" type="Control" parent="UIRoot"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("2_bejoh")
 
 [node name="FadeLayer" type="ColorRect" parent="UIRoot/AdaptiveRoot"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
 script = ExtResource("2_6sj1m")
 
 [node name="LoadingOverlay" type="Control" parent="UIRoot/AdaptiveRoot"]
 unique_name_in_owner = true
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("3_ghmxm")
 
 [node name="Dimmer" type="ColorRect" parent="UIRoot/AdaptiveRoot/LoadingOverlay"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.35)
 
 [node name="Spinner" type="TextureRect" parent="UIRoot/AdaptiveRoot/LoadingOverlay"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ProgressBar" type="ProgressBar" parent="UIRoot/AdaptiveRoot/LoadingOverlay"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_right = 4.0
-offset_bottom = 27.0
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -27.0
+grow_horizontal = 2
+grow_vertical = 0
 
 [node name="ToastLayer" type="Control" parent="UIRoot/AdaptiveRoot"]
 unique_name_in_owner = true
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("4_gba72")
 
 [node name="ToastStack" type="VBoxContainer" parent="UIRoot/AdaptiveRoot/ToastLayer"]
-layout_mode = 0
-offset_right = 40.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
 offset_bottom = 40.0
+grow_horizontal = 0
 
 [node name="SystemMenu" type="Control" parent="UIRoot/AdaptiveRoot"]
 unique_name_in_owner = true
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("5_7vfds")
 
 [node name="Panel" type="Panel" parent="UIRoot/AdaptiveRoot/SystemMenu"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 620.0
+offset_bottom = 400.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Title" type="Label" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
+text = "系统菜单"
 
 [node name="Buttons" type="VBoxContainer" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel"]
 layout_mode = 0
@@ -88,21 +137,32 @@ offset_bottom = 40.0
 
 [node name="BtnResume" type="Button" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel/Buttons"]
 layout_mode = 2
+text = "继续"
 
 [node name="BtnSettings" type="Button" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel/Buttons"]
 layout_mode = 2
+text = "设置"
 
 [node name="BtnTitle" type="Button" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel/Buttons"]
 layout_mode = 2
+text = "回到标题"
 
 [node name="BtnQuit" type="Button" parent="UIRoot/AdaptiveRoot/SystemMenu/Panel/Buttons"]
 layout_mode = 2
+text = "退出"
 
 [node name="InputHint" type="Control" parent="UIRoot/AdaptiveRoot"]
 unique_name_in_owner = true
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
 script = ExtResource("6_dfwj7")
 
 [node name="KBM" type="TextureRect" parent="UIRoot/AdaptiveRoot/InputHint"]
@@ -123,6 +183,4 @@ offset_bottom = 40.0
 [node name="DebugConsole" type="RichTextLabel" parent="UIRoot"]
 offset_right = 40.0
 offset_bottom = 40.0
-
-[node name="AudioHub" type="Node" parent="."]
-script = ExtResource("8_toctt")
+autowrap_mode = 0
